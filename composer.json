@@ -1,0 +1,35 @@
+{
+    "name": "scafera/translate",
+    "description": "Translation for the Scafera framework",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "keywords": ["scafera", "locale", "translate", "php"],
+    "homepage": "https://github.com/scafera/translate",
+    "support": {
+        "issues": "https://github.com/scafera/translate/issues",
+        "source": "https://github.com/scafera/translate"
+    },
+    "require": {
+        "php": ">=8.4",
+        "scafera/kernel": "^1.0",
+        "symfony/translation": "^8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Scafera\\Translate\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scafera\\Translate\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "scafera-bundles": {
+            "scafera/frontend": "Scafera\\Translate\\Twig\\ScaferaTranslateTwigBundle"
+        }
+    }
+}
