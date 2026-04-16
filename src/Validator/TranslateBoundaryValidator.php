@@ -9,6 +9,11 @@ use Scafera\Kernel\Tool\FileFinder;
 
 final class TranslateBoundaryValidator implements ValidatorInterface
 {
+    public function getId(): string
+    {
+        return 'translate.boundary';
+    }
+
     public function getName(): string
     {
         return 'Translation Boundary';
