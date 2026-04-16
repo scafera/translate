@@ -4,11 +4,15 @@ Translation for the Scafera framework. UI string translation with locale managem
 
 Internally adopts `symfony/translation`. Userland code never imports Symfony Translation types — boundary enforcement blocks it at compile time.
 
+> **Provides:** UI string translation for Scafera — `Translator` for lookup, `LocaleManager` for locale switching (with RTL detection). Flat JSON translation files with `{name}` parameter syntax (not Symfony's `%name%`). When `scafera/frontend` is installed, a companion bundle registers `{{ t() }}` and `{{ locale_direction() }}` Twig functions automatically.
+>
+> **Depends on:** A Scafera host project whose architecture package defines a translations directory via `getTranslationsDir()` (e.g. `support/translations/` in `scafera/layered`). Twig integration activates only when `scafera/frontend` is installed.
+>
+> **Extension points:** None of its own — `Translator` and `LocaleManager` are consumed as services. New locales are picked up by adding `{locale}.json` files to the translations directory. Locale behavior is tuned via two parameters in `config/config.yaml`: `scafera.translate.default_locale` and `scafera.translate.rtl_locales`.
+>
+> **Not responsible for:** Non-JSON translation formats (no YAML, no XLIFF — deliberate) · multi-level fallback chains (single fallback to default locale only) · choosing the translations directory (architecture package owns `getTranslationsDir()`) · direct use of `Symfony\Component\Translation` types in userland (blocked by `TranslateBoundaryPass` and `TranslateBoundaryValidator`).
+
 This is a **capability package**. It adds optional translation to a Scafera project. It does not define folder structure or architectural rules — those belong to architecture packages.
-
-## Core Idea
-
-Scafera treats the translation engine as an implementation detail. Your application code interacts with `Translator` for string lookup and `LocaleManager` for locale switching — never touching Symfony's Translation component directly. Translation files are flat JSON with `{name}` parameter syntax (not Symfony's `%name%` format), keeping them engine-independent and human-readable. The translations directory is defined by the architecture package (e.g., `support/translations/` in the layered architecture). When `scafera/frontend` is installed, a companion bundle registers `{{ t() }}` and `{{ locale_direction() }}` Twig functions automatically. A build-time compiler pass enforces these boundaries.
 
 ## What it provides
 
