@@ -38,6 +38,11 @@ final class ScaferaTranslateBundle extends AbstractBundle
 
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        // Register unconditionally — needs to run even when translations dir is missing.
+        $container->services()
+            ->set(Validator\TranslationsDirectoryValidator::class)
+                ->tag('scafera.validator');
+
         $projectDir = $builder->getParameter('kernel.project_dir');
         $translationsDir = $this->resolveTranslationsDir($projectDir);
 

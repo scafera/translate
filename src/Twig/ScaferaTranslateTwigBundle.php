@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Scafera\Translate\Twig;
 
+use Scafera\Kernel\InstalledPackages;
 use Scafera\Translate\LocaleManager;
 use Scafera\Translate\Translator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,6 +20,13 @@ final class ScaferaTranslateTwigBundle extends AbstractBundle
 {
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
+        $projectDir = $builder->getParameter('kernel.project_dir');
+        $architecture = InstalledPackages::resolveArchitecture($projectDir);
+
+        if ($architecture?->getTranslationsDir() === null) {
+            return;
+        }
+
         $container->services()
             ->set(TranslateExtension::class)
                 ->args([

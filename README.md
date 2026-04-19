@@ -6,7 +6,7 @@ Internally adopts `symfony/translation`. Userland code never imports Symfony Tra
 
 > **Provides:** UI string translation for Scafera — `Translator` for lookup, `LocaleManager` for locale switching (with RTL detection). Flat JSON translation files with `{name}` parameter syntax (not Symfony's `%name%`). When `scafera/frontend` is installed, a companion bundle registers `{{ t() }}` and `{{ locale_direction() }}` Twig functions automatically.
 >
-> **Depends on:** A Scafera host project whose architecture package defines a translations directory via `getTranslationsDir()` (e.g. `support/translations/` in `scafera/layered`). Twig integration activates only when `scafera/frontend` is installed.
+> **Depends on:** A Scafera host project whose architecture package defines a translations directory via `getTranslationsDir()` (e.g. `resources/translations/` in `scafera/layered`). Twig integration activates only when `scafera/frontend` is installed.
 >
 > **Extension points:** None of its own — `Translator` and `LocaleManager` are consumed as services. New locales are picked up by adding `{locale}.json` files to the translations directory. Locale behavior is tuned via two parameters in `config/config.yaml`: `scafera.translate.default_locale` and `scafera.translate.rtl_locales`.
 >
@@ -25,7 +25,7 @@ This is a **capability package**. It adds optional translation to a Scafera proj
 ## Design decisions
 
 - **`{name}` parameter syntax, not `%name%`** — translation files use `{name}` for parameter placeholders. This is engine-independent (Symfony uses `%name%`) and human-readable. Replacement is done after Symfony's `trans()` call via simple `strtr()`.
-- **Translations directory is architecture-owned** — defined by `getTranslationsDir()` on the architecture package, not hardcoded. For `scafera/layered`, this is `support/translations/`.
+- **Translations directory is architecture-owned** — defined by `getTranslationsDir()` on the architecture package, not hardcoded. For `scafera/layered`, this is `resources/translations/`.
 - **JSON only** — no YAML, no XLIFF. Flat key-value format. Keeps translation files simple and parseable by any tooling.
 - **Companion bundle for Twig** — the `{{ t() }}` function is registered via `extra.scafera-bundles` companion discovery (ADR-056), not by requiring `scafera/frontend` as a dependency. The translate package works without Twig.
 - **Missing keys return the raw key** — `get('MISSING')` returns `'MISSING'`, not an error. Fallback to default locale is automatic for keys that exist in another locale.
@@ -43,7 +43,7 @@ composer require scafera/translate
 
 ## Translation files
 
-JSON files in the architecture-defined translations directory (e.g., `support/translations/{locale}.json`):
+JSON files in the architecture-defined translations directory (e.g., `resources/translations/{locale}.json`):
 
 ```json
 {
@@ -103,7 +103,7 @@ All configuration is optional. The package works out of the box with sensible de
 | `scafera.translate.rtl_locales` | `[ar, fa, ur]` | Locale codes that use right-to-left text direction. `LocaleManager::getDirection()` returns `'rtl'` for these. |
 
 **Not configurable via parameters:**
-- Translation files directory — defined by the architecture package via `getTranslationsDir()`. For `scafera/layered`, this is `support/translations/`.
+- Translation files directory — defined by the architecture package via `getTranslationsDir()`. For `scafera/layered`, this is `resources/translations/`.
 - File format — JSON only. No YAML, no XLIFF.
 - Fallback chain — always falls back to the default locale. No multi-level fallback.
 
